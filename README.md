@@ -14,8 +14,8 @@ A student project to develop a video game using Unity. Currently, we are in the 
 - **3D Asset Creation**: Blender
 
 ## Roles
-- **Jhon (Developer)**: Responsible for physics, gameplay, functionalities, and some animations.
-- **Fred (Creative Collaborator)**: Focused on 3D asset creation and animations.
+- **Manu (Developer)**: Responsible for physics, gameplay, functionalities, and some animations.
+- **Louis (3D Artist)**: Focused on 3D asset creation and animations.
 
 ## Future Updates
 As the project progresses, updates will include the implementation of game features and mechanics, along with asset development.
