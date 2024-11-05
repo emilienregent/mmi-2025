@@ -3,7 +3,7 @@
 ## Description
 A student project to develop a video game using Unity. Currently, we are in the brainstorming phase to define the overall concept, gameplay mechanics, and target audience. The game will incorporate 3D assets created using Blender.
 
-## Current Status
+## Project status
 - **Brainstorming**: Defining the general concept (genre, theme, art style).
 - **Game Mechanics**: Discussing simple gameplay mechanics (platformer, puzzle, racing, etc.).
 - **Target Audience**: Considering the target audience and the project's complexity.
