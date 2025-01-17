@@ -422,6 +422,132 @@ La plupart des composants d'interaction ont des points communs. Ils sont sélect
 
 Les composants d'interaction ont au moins un UnityEvent qui est invoqué lorsque l'utilisateur interagit avec le composant d'une manière spécifique. Le système d'interface utilisateur détecte et enregistre toutes les exceptions qui se propagent hors du code attaché à UnityEvent.
 
+# Cinemachine
+
+## Installation
+
+> [!NOTE]
+> Plus de détails dans le [manuel](https://docs.unity3d.com/Manual/upm-ui.html)
+
+Cinemachine est un package qui n'est pas inclus par défaut dans un nouveau projet.
+Il est donc nécessaire de l'importer comme tout autre package Unity.
+
+1. Ouvrez la fenêtre Window / Package Manager
+2. Sélectionnez la catégorie Unity Registry
+3. Installez le package Cinemachine
+
+## Éléments essentiels
+
+> [!NOTE]
+> Plus de détails dans le [manuel](https://docs.unity3d.com/Packages/com.unity.cinemachine@3.1/manual/concept-essential-elements.html)
+
+Une configuration Cinemachine fonctionnelle implique trois principaux types d'éléments :
+
+- Une seule caméra Unity qui capture les images de la scène
+- Un Cinemachine Brain qui active la fonctionnalité Cinemachine dans la caméra Unity
+- Une ou plusieurs Cinemachine Cameras qui contrôlent à tour de rôle la caméra Unity en fonction de leur statut
+
+## La Caméra Unity
+
+> [!NOTE]
+> Plus de détails dans le [manuel](https://docs.unity3d.com/2022.3/Documentation/Manual/class-Camera.html)
+
+La caméra Unity est un GameObject qui inclut un composant Camera, par opposition aux caméras Cinemachine.
+
+### Projection
+Active ou désactive la capacité de la caméra à simuler la perspective.
+
+#### Perspective
+La caméra rendra les objets avec une perspective intacte.
+Utilisez les paramètres de Field of View pour contrôler l'angle de vue de la caméra.
+Mesuré en degrés selon l'axe spécifié dans FOV Axis.
+
+![Image d'illustration](https://docs.unity3d.com/2022.3/Documentation/uploads/Main/Camera-Non-Ortho-FPS.jpg)
+
+#### Orthographic
+La caméra rendra les objets de manière uniforme, sans aucun sens de la perspective.
+Contrôlez la zone visible par l’utilisateur sur son écran (viewport) grâce au paramètre Size. 
+
+![Image d'illustration](https://docs.unity3d.com/2022.3/Documentation/uploads/Main/Camera-Ortho-FPS.jpg)
+
+## Cinemachine Brain
+
+> [!NOTE]
+> Plus de détails dans le [manuel](https://docs.unity3d.com/Packages/com.unity.cinemachine@2.10/manual/CinemachineBrainProperties.html)
+
+Pour fonctionner avec Cinemachine, le GameObject qui porte la Camera doit inclure un composant Cinemachine Brain.
+
+Les GameObject dotés d'un Cinemachine Brain sont affichés dans la hiérarchie avec une petite icône CinemachineCamera à côté d'eux. Vous pouvez désactiver cette option à partir du panneau Préférences Cinemachine.
+
+Ce composant est responsable de :
+- Surveiller toutes les caméras Cinemachine actives dans la scène.
+- Déterminer quelle caméra Cinemachine contrôle la caméra Unity.
+- Gérer la transition lorsqu'une autre caméra Cinemachine prend le contrôle de la caméra Unity.
+
+![Image d'illustration](https://docs.unity3d.com/Packages/com.unity.cinemachine@2.10/manual/images/CinemachineBrain.png)
+
+Pour ajouter un composant Cinemachine Brain à une caméra Unity, effectuez l'une des opérations suivantes :
+
+- Utilisez le menu GameObject > Cinemachine pour ajouter une CinemachineCamera à votre scène. Unity ajoute un composant Cinemachine Brain à la caméra Unity pour vous s'il n'y en a pas déjà un.
+- Ajoutez vous-même un composant Cinemachine Brain à la caméra Unity.
+
+## Cinemachine Camera (Virtual Camera)
+
+> [!NOTE]
+> Plus de détails dans le [manuel](https://docs.unity3d.com/Packages/com.unity.cinemachine@2.10/manual/CinemachineVirtualCamera.html)
+
+La CinemachineCamera est un composant que vous ajoutez à un GameObject vide. Il représente une Cinemachine Camera dans la scène Unity.
+
+![Image d'illustration](https://docs.unity3d.com/Packages/com.unity.cinemachine@2.10/manual/images/CinemachineVCamProperties.png)
+
+Utilisez les propriétés Aim, Body et Noise pour spécifier la manière dont la caméra virtuelle anime la position, la rotation et d'autres propriétés. La caméra virtuelle applique ces paramètres à la caméra Unity lorsque Cinemachine Brain transfère le contrôle de la caméra Unity à la caméra virtuelle prioritaire.
+
+### Priority
+Ce paramètre contrôle la manière dont la sortie de cette CinemachineCamera est utilisée par CinemachineBrain. 
+
+À tout moment, chaque caméra virtuelle peut être dans l’un de ces états en fonction des valeurs de priorité :
+
+- Live: La caméra virtuelle contrôle activement une caméra Unity dotée d'un cerveau Cinemachine.
+- Standby: La caméra virtuelle ne contrôle pas la caméra Unity. Cependant, elle suit et vise toujours ses cibles et se met à jour à chaque image.
+- Disabled: La caméra virtuelle ne contrôle pas la caméra Unity et ne suit ni ne vise activement ses cibles.
+
+### Follow
+L'objet GameObject cible avec lequel la caméra virtuelle se déplace. Les propriétés Body utilisent cette cible pour mettre à jour la position de la caméra Unity.
+
+### Body
+
+> [!NOTE]
+> Plus de détails dans le [manuel](https://docs.unity3d.com/Packages/com.unity.cinemachine@2.10/manual/CinemachineVirtualCameraBody.html)
+
+Utilisez les propriétés Body pour spécifier l’algorithme qui déplace la caméra virtuelle dans la scène.
+
+Différents algorithmes sont détaillés dans la documentation pour répondre aux besoins variés de suivi du GameObject cible. Mais un des principaux reste le mode 3rd Person follow qui permet de pivoter la caméra horizontalement et verticalement autour du joueur en suivant la cible Follow.
+
+### Aim
+
+> [!NOTE]
+> Plus de détails dans le [manuel](https://docs.unity3d.com/Packages/com.unity.cinemachine@2.10/manual/CinemachineVirtualCameraAim.html)
+
+Utilisez les propriétés Aim pour spécifier comment faire pivoter la caméra virtuelle.
+
+Les principaux algorithmes utilisés sont Composer et Group Composer, qui permettent respectivement de garder une ou plusieurs cibles dans le cadre de la caméra.
+
+## Transitions
+
+> [!NOTE]
+> Plus de détails dans le [manuel](https://docs.unity3d.com/Packages/com.unity.cinemachine@2.10/manual/CinemachineBlending.html)
+
+Utilisez les propriétés de Blend pour spécifier comment le composant Cinemachine Brain effectue un blend entre les caméras virtuelles.
+
+Un Blend Cinemachine n'est pas un fade. Au contraire, Cinemachine Brain effectue une animation fluide de la position, de la rotation et d'autres paramètres de la caméra Unity d'une caméra virtuelle à l'autre.
+
+Pour les fusions entre des caméras virtuelles spécifiques, utilisez la liste Custom Blends dans le composant Cinemachine Brain. Utilisez la propriété Default Blend dans Cinemachine Brain pour spécifier des fusions entre des caméras virtuelles qui n'ont pas de blending personnalisé.
+
+![Image d'illustration](https://docs.unity3d.com/Packages/com.unity.cinemachine@2.10/manual/images/CinemachineCustomBlends.png)
+
+> [!TIP]
+> Utilisez le nom réservé **ANY CAMERA** pour effectuer un blend depuis ou vers n'importe quelle caméra virtuelle.
+
 # La lumière
 Les rayons de lumière rebondissent sur les objets qui nous entourent.
 Chaque rayon réagit en fonction des propriétés des matériaux rencontrés lors de chaque rebond (fréquence, direction, etc).
