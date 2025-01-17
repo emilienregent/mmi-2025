@@ -523,39 +523,64 @@ Ces objets contribuent à la lumière réfléchie dans votre scène et les propr
 L'émission ne sera reçue que par les objets marqués comme « Static » ou « Lightmap Static » dans l'inspecteur.
 De même, les matériaux émissifs appliqués à une géométrie non statique ou dynamique telle que des personnages ne contribueront pas à l’éclairage de la scène.
 
+# L'Audio
 
+> [!NOTE]
+> Plus de détails dans le [manuel](https://docs.unity3d.com/Manual/AudioOverview.html)
 
+Pour simuler les effets de position, Unity nécessite que les sons proviennent d'Audio Source attachées à des objets.
+Les sons émis sont ensuite captés par un Audio Listener attaché à un autre objet, le plus souvent la caméra principale.
 
+![image](https://docs.unity3d.com/uploads/Main/AudioSourceListDiagram.png)
 
+> [!TIP]
+> Unity ne peut pas calculer les échos uniquement à partir de la géométrie de la scène, mais vous pouvez les simuler en ajoutant des filtres audio aux objets.
 
+## Les Formats
+Unity peut importer des fichiers audio aux formats AIFF, WAV, MP3 et Ogg de la même manière que d'autres ressources.
+Importez un fichier audio pour créer un clip audio que vous pouvez ensuite faire glisser vers une source audio ou utiliser à partir d'un script.
 
+## Audio Source
 
+> [!NOTE]
+> Plus de détails dans le [manuel](https://docs.unity3d.com/Manual/class-AudioSource.html)
 
+La source audio lit un clip audio dans la scène.
+Le clip peut être lu par un Audio Listener ou via un mixeur audio.
+L'audio peut être réparti entre les différents haut-parleurs de la plateforme (stéréo vers 7.1) (Spread).
+Il peut être également transformé entre 3D et 2D (SpatialBlend).
+L'audio peut être atténué avec la distance par l'intermédiaire de courbes de décroissance.
 
+Il est possible de faire tourner le clip audio en boucle lorsqu'il atteint la fin en activant la propriété Loop.
+Vous pouvez définir la quantité de changement de hauteur (Pitch) due au ralentissement/à l'accélération du clip audio. La valeur 1 correspond à la vitesse de lecture normale.
 
+![image](https://docs.unity3d.com/uploads/Main/AudioSourceInspector.png)
 
+Pour créer une nouvelle source audio :
+	
+- Importez vos fichiers audio dans votre projet Unity. Ce sont désormais des clips audio.
+- Créez un GameObject de source audio (menu : GameObject > Audio > Audio Source).
+- Avec le nouveau GameObject sélectionné, sélectionnez Composant > Audio > Audio Source.
 
+Dans l'inspecteur, recherchez la propriété Clip audio sur le composant Audio Source et attribuez un clip, soit en le faisant glisser depuis la fenêtre de projet, soit en cliquant sur la petite icône en forme de cercle à droite de la propriété Inspecteur, puis en sélectionnant un clip dans la liste.
+	
+> [!TIP]
+> Si vous souhaitez créer une source audio uniquement pour un clip audio que vous avez dans le dossier Assets, vous pouvez simplement faire glisser ce clip vers la vue de la scène - un GameObject avec un composant Source audio sera créé automatiquement pour celui-ci.
 
+## Audio Listener
 
+> [!NOTE]
+> Plus de détails dans le [manuel](https://docs.unity3d.com/Manual/class-AudioListener.html)
 
+Il reçoit les entrées de n'importe quelle source audio donnée dans la scène et diffuse les sons via la sortie son de la plateforme. 
 
+En fonction de la perspective du joueur, il peut être plus judicieux de connecter l'Audio Listener à la caméra principale (expérience à la première personne par exemple). Cependant, si la caméra est détachée de la représentation du joueur, vous devez alors déterminer où l'Audio Listener s'intègre le mieux (éventuellement près de la tête du personnage principal).
 
+L'Audio Listener n'a pas de propriétés. Il doit simplement être ajouté pour fonctionner. Il est toujours ajouté à la caméra principale par défaut.
 
+Lorsque l'Audio Listener est attaché à un GameObject dans votre scène, toutes les sources suffisamment proches de seront captées et transmises à la sortie son de la plateforme.
 
+> [!IMPORTANT]
+> Chaque scène ne peut avoir qu'un seul Audio Listener pour fonctionner correctement.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Si les sources sont en 3D, l'Audio Listener émulera la position, la vitesse et l'orientation du son dans le monde 3D. 2D ignorera tout traitement 3D.
